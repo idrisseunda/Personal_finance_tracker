@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
+            /* Use an image background */
             background-image: url('top-view-desk-with-financial-instruments.jpg');
             background-size: cover;
             background-position: center;
@@ -15,6 +16,7 @@
             position: relative;
         }
         
+        /* Dark overlay to make text readable */
         body::before {
             content: "";
             position: fixed;
@@ -22,49 +24,57 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.4);
             z-index: 0;
         }
         
-        .login-container {
+        /* Make content appear above background */
+        .w-full.max-w-md {
             position: relative;
             z-index: 1;
         }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
-    <div class="login-container w-full max-w-md">
+    <div class="w-full max-w-md">
         <!-- Login Form -->
         <div id="loginForm" class="bg-white rounded-2xl shadow-2xl p-8">
             <div class="text-center mb-8">
-                <img src="AIMS_logo.png" alt="AIMS Logo" class="h-20 w-20 object-contain mx-auto mb-4">
-                <h1 class="text-3xl font-bold text-gray-800 mb-2">Welcome Back!</h1>
-                <p class="text-gray-600">Sign in to your account</p>
+                <div class="flex flex-col items-center text-center gap-4">
+                    <img src="AIMS_logo.png" alt="School Logo" class="h-16 w-16 object-contain">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-800 mb-2">Welcome Back!</h1>
+                        <p class="text-gray-600">Sign in to your account</p>
+                    </div>
+                </div>
             </div>
 
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                     <input type="email" id="loginEmail" placeholder="your.email@example.com" 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
                     <input type="password" id="loginPassword" placeholder="••••••••" 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                 </div>
 
-                <div id="loginError" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm"></div>
+                <div id="loginError" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                </div>
 
                 <button onclick="handleLogin()" 
-                        class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-3 rounded-lg font-medium">
+                        class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-3 rounded-lg font-medium transition-all transform hover:scale-105">
                     Sign In
                 </button>
 
                 <div class="text-center text-sm text-gray-600">
                     Don't have an account? 
-                    <button onclick="showRegisterForm()" class="text-indigo-600 hover:text-indigo-800 font-medium">Sign up</button>
+                    <button onclick="showRegisterForm()" class="text-indigo-600 hover:text-indigo-800 font-medium">
+                        Sign up
+                    </button>
                 </div>
             </div>
         </div>
@@ -72,77 +82,72 @@
         <!-- Registration Form -->
         <div id="registerForm" class="bg-white rounded-2xl shadow-2xl p-8 hidden">
             <div class="text-center mb-8">
-                <img src="AIMS_logo.png" alt="AIMS Logo" class="h-20 w-20 object-contain mx-auto mb-4">
-                <h1 class="text-3xl font-bold text-gray-800 mb-2">Create Account</h1>
-                <p class="text-gray-600">Sign up to get started</p>
+                <div class="flex flex-col items-center text-center gap-4">
+                    <img src="AIMS_logo.png" alt="School Logo" class="h-16 w-16 object-contain">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-800 mb-2">Create Account</h1>
+                        <p class="text-gray-600">Sign up to get started</p>
+                    </div>
+                </div>
             </div>
 
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
                     <input type="text" id="registerName" placeholder="John Doe" 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                     <input type="email" id="registerEmail" placeholder="your.email@example.com" 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
                     <input type="password" id="registerPassword" placeholder="••••••••" 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                     <p class="text-xs text-gray-500 mt-1">At least 6 characters</p>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
                     <input type="password" id="registerConfirmPassword" placeholder="••••••••" 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                 </div>
 
-                <div id="registerError" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm"></div>
-                <div id="registerSuccess" class="hidden bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm"></div>
+                <div id="registerError" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                </div>
+
+                <div id="registerSuccess" class="hidden bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
+                </div>
 
                 <button onclick="handleRegister()" 
-                        class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-3 rounded-lg font-medium">
+                        class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-3 rounded-lg font-medium transition-all transform hover:scale-105">
                     Create Account
                 </button>
 
                 <div class="text-center text-sm text-gray-600">
                     Already have an account? 
-                    <button onclick="showLoginForm()" class="text-indigo-600 hover:text-indigo-800 font-medium">Sign in</button>
+                    <button onclick="showLoginForm()" class="text-indigo-600 hover:text-indigo-800 font-medium">
+                        Sign in
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // ONLY check if already logged in - DO NOT redirect yet
-        let alreadyChecked = false;
-        
-        function checkLoginStatus() {
-            if (alreadyChecked) return;
-            alreadyChecked = true;
-            
+        // Check if user is already logged in
+        window.onload = function() {
             const currentUser = localStorage.getItem('currentUser');
             if (currentUser) {
-                console.log('User already logged in, redirecting...');
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 100);
+                window.location.href = 'dashboard.html';
             }
-        }
-        
-        // Check after page loads
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', checkLoginStatus);
-        } else {
-            checkLoginStatus();
-        }
+        };
 
+        // Show/Hide forms
         function showRegisterForm() {
             document.getElementById('loginForm').classList.add('hidden');
             document.getElementById('registerForm').classList.remove('hidden');
@@ -153,6 +158,7 @@
             document.getElementById('loginForm').classList.remove('hidden');
         }
 
+        // Handle Registration
         function handleRegister() {
             const name = document.getElementById('registerName').value.trim();
             const email = document.getElementById('registerEmail').value.trim();
@@ -162,17 +168,18 @@
             const errorDiv = document.getElementById('registerError');
             const successDiv = document.getElementById('registerSuccess');
             
+            // Hide previous messages
             errorDiv.classList.add('hidden');
             successDiv.classList.add('hidden');
 
+            // Validation
             if (!name || !email || !password || !confirmPassword) {
                 errorDiv.textContent = 'Please fill in all fields';
                 errorDiv.classList.remove('hidden');
                 return;
             }
 
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
+            if (!validateEmail(email)) {
                 errorDiv.textContent = 'Please enter a valid email address';
                 errorDiv.classList.remove('hidden');
                 return;
@@ -190,39 +197,46 @@
                 return;
             }
 
+            // Get existing users
             let users = JSON.parse(localStorage.getItem('users') || '[]');
             
+            // Check if email already exists
             if (users.some(user => user.email === email)) {
                 errorDiv.textContent = 'An account with this email already exists';
                 errorDiv.classList.remove('hidden');
                 return;
             }
 
+            // Create new user
             const newUser = {
                 id: Date.now(),
                 name: name,
                 email: email,
-                password: password,
+                password: password, // Note: In real app, this should be hashed!
                 createdAt: new Date().toISOString()
             };
 
             users.push(newUser);
             localStorage.setItem('users', JSON.stringify(users));
 
+            // Show success message
             successDiv.textContent = 'Account created successfully! Redirecting to login...';
             successDiv.classList.remove('hidden');
 
+            // Clear form
             document.getElementById('registerName').value = '';
             document.getElementById('registerEmail').value = '';
             document.getElementById('registerPassword').value = '';
             document.getElementById('registerConfirmPassword').value = '';
 
+            // Redirect to login after 2 seconds
             setTimeout(() => {
                 showLoginForm();
                 successDiv.classList.add('hidden');
             }, 2000);
         }
 
+        // Handle Login
         function handleLogin() {
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
@@ -230,13 +244,17 @@
             const errorDiv = document.getElementById('loginError');
             errorDiv.classList.add('hidden');
 
+            // Validation
             if (!email || !password) {
                 errorDiv.textContent = 'Please enter email and password';
                 errorDiv.classList.remove('hidden');
                 return;
             }
 
+            // Get users
             const users = JSON.parse(localStorage.getItem('users') || '[]');
+            
+            // Find user
             const user = users.find(u => u.email === email && u.password === password);
 
             if (!user) {
@@ -245,22 +263,30 @@
                 return;
             }
 
+            // Set current user (without password)
             const currentUser = {
                 id: user.id,
                 name: user.name,
                 email: user.email
             };
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            
-            console.log('Login successful, redirecting...');
+
+            // Redirect to dashboard
             window.location.href = 'dashboard.html';
         }
 
+        // Email validation
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Allow Enter key to submit
         document.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 if (!document.getElementById('loginForm').classList.contains('hidden')) {
                     handleLogin();
-                } else {
+                } else if (!document.getElementById('registerForm').classList.contains('hidden')) {
                     handleRegister();
                 }
             }

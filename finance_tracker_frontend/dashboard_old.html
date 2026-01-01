@@ -5,78 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personal Finance Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <style>
-        body {
-            background-image: url('top-view-desk-with-financial-instruments.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            min-height: 100vh;
-            position: relative;
-        }
-        
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 0;
-        }
-        
-        .container {
-            position: relative;
-            z-index: 1;
-        }
-    </style>
-</head>
-<body>
     <script>
-        // Check authentication FIRST - before anything else loads
+        console.log('Current user:', localStorage.getItem('currentUser'));
+        // Check if user is logged in
         (function() {
             const currentUser = localStorage.getItem('currentUser');
             if (!currentUser) {
-                console.log('No user logged in, redirecting to login...');
-                window.location.replace('index.html');
-                return;
+                window.location.href = 'index.html';
+            } else {
+                 // Display user info
+                  const user = JSON.parse(currentUser);
+                  document.addEventListener('DOMContentLoaded', function() {
+                         const userNameElement = document.getElementById('userName');
+                         if (userNameElement) {
+                             userNameElement.textContent = user.name;
+                         }
+                  });
             }
-            console.log('User authenticated:', JSON.parse(currentUser).name);
-        })();
-    </script>
+         })();
 
+        // Logout function
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+               localStorage.removeItem('currentUser');
+               window.location.href = 'index.html';
+            }
+       }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<style>
+    body {
+        /* Use an image background */
+        background-image: url('background.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        min-height: 100vh;
+        position: relative;
+    }
+    
+    /* Dark overlay to make text readable */
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 0;
+    }
+    
+    /* Make content appear above background */
+    .container {
+        position: relative;
+        z-index: 1;
+    }
+</style>
+</head>
+<body>
     <div class="container mx-auto px-4 py-8 max-w-7xl">
-        <!-- Header with Logout -->
+        <!-- Header -->
+        <header class="mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">💰 Personal Finance Tracker</h1>
+            <p class="text-gray-600">Track your income, expenses, savings, and investments</p>
+        </header>
         <header class="mb-8 bg-white rounded-xl shadow-lg p-6">
-            <div class="flex items-center justify-between flex-wrap gap-4">
-                <div class="flex items-center gap-4">
-                    <img src="AIMS_logo.png" alt="AIMS Logo" class="h-16 w-16 object-contain">
-                    <div>
-                        <h1 class="text-4xl font-bold text-gray-800 mb-2">💰 Personal Finance Tracker</h1>
-                        <p class="text-gray-600">Track your income, expenses, savings, and investments</p>
-                    </div>
+            <div class="flex items-center gap-4">
+                 <!-- School Logo -->
+                 <img src="AIMS_logo.png" alt="School Logo" class="h-16 w-16 object-contain">
+        
+                 <div class="flex-1">
+                      <h1 class="text-4xl font-bold text-gray-800 mb-2">💰 Personal Finance Tracker</h1>
+                      <p class="text-gray-600">Track your income, expenses, savings, and investments</p>
                 </div>
                 <div class="text-right">
-                    <p class="text-sm text-gray-600 mb-2">Welcome, <span id="userName" class="font-semibold text-gray-800"></span>!</p>
-                    <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition-all">
-                        Logout
-                    </button>
-                </div>
-            </div>
-        </header>
+                   <p class="text-sm text-gray-600 mb-2">Welcome, <span id="userName" class="font-semibold text-gray-800"></span>!</p>
+                   <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition-all">
+                       Logout
+                   </button>
+               </div>
+           </div>  
+       </header>
 
         <!-- Controls -->
         <div class="flex gap-4 mb-6 flex-wrap items-center">
-            <button onclick="toggleAddForm()" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 shadow-lg transition-all transform hover:scale-105">
+            <button onclick="toggleAddForm()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 shadow-lg transition-all">
                 <span>➕</span>
                 Add Transaction
             </button>
             
-            <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-lg">
+            <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow">
                 <span>🔍</span>
-                <select id="timeFilter" onchange="updateDashboard()" class="border-none bg-transparent focus:outline-none cursor-pointer font-medium text-gray-700">
+                <select id="timeFilter" onchange="updateDashboard()" class="border-none bg-transparent focus:outline-none cursor-pointer">
                     <option value="daily">Daily</option>
                     <option value="weekly">Weekly</option>
                     <option value="monthly" selected>Monthly</option>
@@ -91,7 +112,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Type</label>
-                    <select id="transactionType" onchange="updateCategoryOptions()" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white">
+                    <select id="transactionType" onchange="updateCategoryOptions()" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                         <option value="income">Income</option>
                         <option value="expense" selected>Expense</option>
                         <option value="savings">Savings</option>
@@ -101,28 +122,28 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                    <select id="category" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white">
+                    <select id="category" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                         <option value="">Select...</option>
                     </select>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Amount</label>
-                    <input type="number" id="amount" step="0.01" placeholder="0.00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white">
+                    <input type="number" id="amount" step="0.01" placeholder="0.00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
-                    <input type="date" id="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white">
+                    <input type="date" id="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                 </div>
 
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                    <input type="text" id="description" placeholder="Optional description" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white">
+                    <input type="text" id="description" placeholder="Optional description" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                 </div>
 
                 <div class="md:col-span-2 flex gap-4">
-                    <button onclick="addTransaction()" class="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-3 rounded-lg font-medium transition-all transform hover:scale-105">
+                    <button onclick="addTransaction()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-medium transition-all">
                         Add Transaction
                     </button>
                     <button onclick="toggleAddForm()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 rounded-lg font-medium transition-all">
@@ -134,42 +155,42 @@
 
         <!-- Summary Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-            <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-2xl p-6 text-white transform hover:scale-105 transition-all">
+            <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-sm opacity-90">Total Income</span>
-                    <span class="text-2xl">📈</span>
+                    <span>📈</span>
                 </div>
                 <p id="totalIncome" class="text-3xl font-bold">$0.00</p>
             </div>
 
-            <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl shadow-2xl p-6 text-white transform hover:scale-105 transition-all">
+            <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl shadow-lg p-6 text-white">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-sm opacity-90">Total Expenses</span>
-                    <span class="text-2xl">📉</span>
+                    <span>📉</span>
                 </div>
                 <p id="totalExpense" class="text-3xl font-bold">$0.00</p>
             </div>
 
-            <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-2xl p-6 text-white transform hover:scale-105 transition-all">
+            <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-sm opacity-90">Savings</span>
-                    <span class="text-2xl">🐷</span>
+                    <span>🐷</span>
                 </div>
                 <p id="totalSavings" class="text-3xl font-bold">$0.00</p>
             </div>
 
-            <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-2xl p-6 text-white transform hover:scale-105 transition-all">
+            <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-sm opacity-90">Investments</span>
-                    <span class="text-2xl">💰</span>
+                    <span>💰</span>
                 </div>
                 <p id="totalInvestment" class="text-3xl font-bold">$0.00</p>
             </div>
 
-            <div id="balanceCard" class="bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl shadow-2xl p-6 text-white transform hover:scale-105 transition-all">
+            <div id="balanceCard" class="bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl shadow-lg p-6 text-white">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-sm opacity-90">Balance</span>
-                    <span class="text-2xl">📅</span>
+                    <span>📅</span>
                 </div>
                 <p id="balance" class="text-3xl font-bold">$0.00</p>
             </div>
@@ -177,29 +198,29 @@
 
         <!-- Charts -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <div class="bg-white rounded-xl shadow-2xl p-6">
+            <div class="bg-white rounded-xl shadow-lg p-6">
                 <h3 class="text-xl font-bold mb-4 text-gray-800">Income vs Expenses Trend</h3>
                 <canvas id="trendChart"></canvas>
             </div>
 
-            <div class="bg-white rounded-xl shadow-2xl p-6">
+            <div class="bg-white rounded-xl shadow-lg p-6">
                 <h3 class="text-xl font-bold mb-4 text-gray-800">Expenses by Category</h3>
                 <canvas id="expensePieChart"></canvas>
             </div>
 
-            <div class="bg-white rounded-xl shadow-2xl p-6">
+            <div class="bg-white rounded-xl shadow-lg p-6">
                 <h3 class="text-xl font-bold mb-4 text-gray-800">Income by Source</h3>
                 <canvas id="incomeBarChart"></canvas>
             </div>
 
-            <div class="bg-white rounded-xl shadow-2xl p-6">
+            <div class="bg-white rounded-xl shadow-lg p-6">
                 <h3 class="text-xl font-bold mb-4 text-gray-800">Expense Breakdown</h3>
                 <canvas id="expenseBarChart"></canvas>
             </div>
         </div>
 
         <!-- Transaction History -->
-        <div class="bg-white rounded-xl shadow-2xl p-6">
+        <div class="bg-white rounded-xl shadow-lg p-6">
             <h3 class="text-xl font-bold mb-4 text-gray-800">Transaction History</h3>
             <div class="overflow-x-auto">
                 <table class="w-full">
@@ -226,19 +247,7 @@
     </div>
 
     <script>
-        // Get current user and display name
-        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        document.getElementById('userName').textContent = currentUser.name;
-
-        // Logout function
-        function logout() {
-            if (confirm('Are you sure you want to logout?')) {
-                localStorage.removeItem('currentUser');
-                window.location.replace('index.html');
-            }
-        }
-
-        // Data structures - Separate transactions per user
+        // Data structures
         let transactions = [];
         const expenseCategories = ['Food', 'Transportation', 'Health', 'Academics', 'Household', 'Helps', 'Others'];
         const incomeCategories = ['Gift', 'Job', 'Return on Investment', 'Distinction'];
@@ -258,26 +267,26 @@
             updateDashboard();
         });
 
-        // Load transactions for current user
+        // Load from localStorage
         function loadTransactions() {
-            const userKey = 'transactions_' + currentUser.id;
-            const saved = localStorage.getItem(userKey);
+            const saved = localStorage.getItem('financeData');
             if (saved) {
                 transactions = JSON.parse(saved);
             }
         }
 
-        // Save transactions for current user
+        // Save to localStorage
         function saveTransactions() {
-            const userKey = 'transactions_' + currentUser.id;
-            localStorage.setItem(userKey, JSON.stringify(transactions));
+            localStorage.setItem('financeData', JSON.stringify(transactions));
         }
 
+        // Toggle add form
         function toggleAddForm() {
             const form = document.getElementById('addForm');
             form.classList.toggle('hidden');
         }
 
+        // Update category dropdown based on transaction type
         function updateCategoryOptions() {
             const type = document.getElementById('transactionType').value;
             const categorySelect = document.getElementById('category');
@@ -300,6 +309,7 @@
             });
         }
 
+        // Add transaction
         function addTransaction() {
             const type = document.getElementById('transactionType').value;
             const category = document.getElementById('category').value;
@@ -325,6 +335,7 @@
             transactions.unshift(transaction);
             saveTransactions();
             
+            // Reset form
             document.getElementById('amount').value = '';
             document.getElementById('description').value = '';
             document.getElementById('category').value = '';
@@ -333,6 +344,7 @@
             updateDashboard();
         }
 
+        // Delete transaction
         function deleteTransaction(id) {
             if (confirm('Are you sure you want to delete this transaction?')) {
                 transactions = transactions.filter(t => t.id !== id);
@@ -341,6 +353,7 @@
             }
         }
 
+        // Filter transactions by time
         function filterTransactionsByTime() {
             const filter = document.getElementById('timeFilter').value;
             const now = new Date();
@@ -365,32 +378,37 @@
             });
         }
 
+        // Update dashboard
         function updateDashboard() {
             const filtered = filterTransactionsByTime();
             
+            // Calculate totals
             const totalIncome = filtered.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
             const totalExpense = filtered.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
             const totalSavings = filtered.filter(t => t.type === 'savings').reduce((sum, t) => sum + t.amount, 0);
             const totalInvestment = filtered.filter(t => t.type === 'investment').reduce((sum, t) => sum + t.amount, 0);
             const balance = totalIncome - totalExpense - totalSavings - totalInvestment;
 
+            // Update summary cards
             document.getElementById('totalIncome').textContent = '$' + totalIncome.toFixed(2);
             document.getElementById('totalExpense').textContent = '$' + totalExpense.toFixed(2);
             document.getElementById('totalSavings').textContent = '$' + totalSavings.toFixed(2);
             document.getElementById('totalInvestment').textContent = '$' + totalInvestment.toFixed(2);
             document.getElementById('balance').textContent = '$' + balance.toFixed(2);
             
+            // Update balance card color
             const balanceCard = document.getElementById('balanceCard');
             if (balance >= 0) {
-                balanceCard.className = 'bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl shadow-2xl p-6 text-white transform hover:scale-105 transition-all';
+                balanceCard.className = 'bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl shadow-lg p-6 text-white';
             } else {
-                balanceCard.className = 'bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-2xl p-6 text-white transform hover:scale-105 transition-all';
+                balanceCard.className = 'bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg p-6 text-white';
             }
 
             updateTransactionTable(filtered);
             updateCharts(filtered);
         }
 
+        // Update transaction table
         function updateTransactionTable(filtered) {
             const tbody = document.getElementById('transactionTable');
             
@@ -426,6 +444,7 @@
             }).join('');
         }
 
+        // Update charts
         function updateCharts(filtered) {
             updateTrendChart(filtered);
             updateExpensePieChart(filtered);
@@ -433,6 +452,7 @@
             updateExpenseBarChart(filtered);
         }
 
+        // Trend chart
         function updateTrendChart(filtered) {
             const data = {};
             filtered.forEach(t => {
@@ -485,6 +505,7 @@
             });
         }
 
+        // Expense pie chart
         function updateExpensePieChart(filtered) {
             const expenseData = expenseCategories.map(cat => ({
                 name: cat,
@@ -516,6 +537,7 @@
             });
         }
 
+        // Income bar chart
         function updateIncomeBarChart(filtered) {
             const incomeData = incomeCategories.map(cat => ({
                 name: cat,
@@ -548,6 +570,7 @@
             });
         }
 
+        // Expense bar chart
         function updateExpenseBarChart(filtered) {
             const expenseData = expenseCategories.map(cat => ({
                 name: cat,
