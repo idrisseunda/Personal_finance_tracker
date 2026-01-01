@@ -37,13 +37,11 @@
     <script>
         // Check authentication FIRST - before anything else loads
         (function() {
-            const currentUser = localStorage.getItem('currentUser');
-            if (!currentUser) {
+            const userStr = localStorage.getItem('currentUser');
+            if (!userStr || userStr === "null" || userStr === "undefined") {
                 console.log('No user logged in, redirecting to login...');
                 window.location.replace('index.html');
-                return;
             }
-            console.log('User authenticated:', JSON.parse(currentUser).name);
         })();
     </script>
 

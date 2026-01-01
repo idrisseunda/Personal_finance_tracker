@@ -126,13 +126,13 @@
         function checkLoginStatus() {
             if (alreadyChecked) return;
             alreadyChecked = true;
-            
-            const currentUser = localStorage.getItem('currentUser');
-            if (currentUser) {
-                console.log('User already logged in, redirecting...');
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 100);
+    
+            const userStr = localStorage.getItem('currentUser');
+            // Check if user exists AND isn't the string "null"
+            if (userStr && userStr !== "null" && userStr !== "undefined") {
+                 console.log('User already logged in, redirecting...');
+                 // Use replace so the login page isn't kept in history
+                 window.location.replace('dashboard.html');
             }
         }
         
