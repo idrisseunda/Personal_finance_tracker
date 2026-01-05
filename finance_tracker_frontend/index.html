@@ -188,7 +188,7 @@
 
                 if (response.ok) {
                     alert("Registration successful! Please login.");
-                    toggleForms(); // Switch to login view
+                    showLoginForm(); // Switch to login view
                 } else {
                     errorDiv.textContent = data.error || "Registration failed";
                     errorDiv.classList.remove('hidden');
