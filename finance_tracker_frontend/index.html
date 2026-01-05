@@ -159,8 +159,8 @@
 
         // This automatically chooses the right URL based on the 'isProduction' switch
         const API_BASE_URL = isProduction 
-            ? "https://personal-finance-tracker-3-dcqd.onrender.com" // Update this later
-            : "http://127.0.0.1:5000";
+            ? "http://127.0.0.1:5000"
+            : "https://personal-finance-tracker-3-dcqd.onrender.com"; // Update this later
 
         async function handleRegister() {
             const name = document.getElementById('registerName').value.trim();
