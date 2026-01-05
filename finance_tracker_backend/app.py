@@ -30,7 +30,7 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=7)  # Token expires in 7
 
 # Initialize extensions
 #CORS(app, resources={r"/api/*": {"origins": "*"}})
-CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
+CORS(app, origins=["https://papaya-blini-ac8b2a.netlify.app"], supports_credentials=True)
 db.init_app(app)
 jwt = JWTManager(app)
 
