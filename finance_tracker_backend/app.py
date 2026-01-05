@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
@@ -12,9 +13,14 @@ load_dotenv()
 app = Flask(__name__)
 
 # Configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+# 3. Then do your database config
+db_url = os.environ.get('DATABASE_URL', 'postgresql://postgres:1234@localhost/finance_tracker')
+if db_url and db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql://", 1)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY','development-secret-key')
 
 app.config['JWT_TOKEN_LOCATION'] = ['headers'] 
 app.config['JWT_HEADER_NAME'] = 'Authorization'
@@ -494,4 +500,7 @@ if __name__ == '__main__':
     print("🔐 Authentication: JWT")
     print("🌐 Server: http://localhost:5000")
     print("=" * 50)
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
+    #app.run(debug=True, host='0.0.0.0', port=5000)
