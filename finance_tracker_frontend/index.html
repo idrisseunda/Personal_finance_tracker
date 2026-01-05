@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - FINA-Personal Finance Tracker</title>
-     <link rel="icon" href="AIMS_logo.ico" type="image/x-icon">
+     <link rel="icon" type="image/png" href="AIMS_logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -159,8 +159,8 @@
 
         // This automatically chooses the right URL based on the 'isProduction' switch
         const API_BASE_URL = isProduction 
-            ? "http://127.0.0.1:5000"
-            : "https://personal-finance-tracker-3-dcqd.onrender.com"; // Update this later
+            ? "https://personal-finance-tracker-3-dcqd.onrender.com" // Update this later
+            : "http://127.0.0.1:5000";
 
         async function handleRegister() {
             const name = document.getElementById('registerName').value.trim();
@@ -207,7 +207,7 @@
             errorDiv.classList.add('hidden');
 
             try {
-                const response = await fetch('http://127.0.0.1:5000/api/login', {
+                const response = await fetch(`${API_BASE_URL}/api/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
