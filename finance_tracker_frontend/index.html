@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Personal Finance Tracker</title>
+    <title>Login - FINA-Personal Finance Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -38,7 +38,7 @@
         <div id="loginForm" class="bg-white rounded-2xl shadow-2xl p-8">
             <div class="text-center mb-8">
                 <img src="AIMS_logo.png" alt="AIMS Logo" class="h-20 w-20 object-contain mx-auto mb-4">
-                <h1 class="text-3xl font-bold text-gray-800 mb-2">Welcome Back!</h1>
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Welcome Back to FINA!</h1>
                 <p class="text-gray-600">Sign in to your account</p>
             </div>
 
@@ -153,6 +153,14 @@
             document.getElementById('loginForm').classList.remove('hidden');
         }
 
+        // Change this to true when you are ready to go online
+        const isProduction = true; 
+
+        // This automatically chooses the right URL based on the 'isProduction' switch
+        const API_BASE_URL = isProduction 
+            ? "https://personal-finance-tracker-3-dcqd.onrender.com" // Update this later
+            : "http://127.0.0.1:5000";
+
         async function handleRegister() {
             const name = document.getElementById('registerName').value.trim();
             const email = document.getElementById('registerEmail').value.trim();
@@ -169,7 +177,7 @@
             }
 
             try {
-                const response = await fetch('http://127.0.0.1:5000/api/register', {
+                const response = await fetch('${API_BASE_URL}/api/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name, email, password })

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Finance Tracker</title>
+    <title>FINA-Personal Finance Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
@@ -52,12 +52,12 @@
                 <div class="flex items-center gap-4">
                     <img src="AIMS_logo.png" alt="AIMS Logo" class="h-16 w-16 object-contain">
                     <div>
-                        <h1 class="text-4xl font-bold text-gray-800 mb-2">💰 Personal Finance Tracker</h1>
+                        <h1 class="text-4xl font-bold text-gray-800 mb-2">💰FINA-Personal Finance Tracker</h1>
                         <p class="text-gray-600">Track your income, expenses, savings, and investments</p>
                     </div>
                 </div>
                 <div class="text-right">
-                    <p class="text-sm text-gray-600 mb-2">Welcome, <span id="userName" class="font-semibold text-gray-800"></span>!</p>
+                    <p class="text-sm text-gray-600 mb-2">Welcome to FINA, <span id="userName" class="font-semibold text-gray-800"></span>!</p>
                     <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition-all">
                         Logout
                     </button>
@@ -181,6 +181,11 @@
                 <canvas id="trendChart"></canvas>
             </div>
 
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-lg font-bold mb-4 text-gray-800">Income vs Expense (Bar Trend)</h3>
+                <canvas id="trendBarChart" height="200"></canvas>
+            </div>
+
             <div class="bg-white rounded-xl shadow-2xl p-6">
                 <h3 class="text-xl font-bold mb-4 text-gray-800">Expenses by Category</h3>
                 <canvas id="expensePieChart"></canvas>
@@ -225,7 +230,15 @@
     </div>
 
     <script>
-        // Get current user and display name
+
+        // Change this to true when you are ready to go online
+        const isProduction = true; 
+
+        // This automatically chooses the right URL based on the 'isProduction' switch
+        const API_BASE_URL = isProduction 
+            ? "https://personal-finance-tracker-3-dcqd.onrender.com" // Update this later
+            : "http://127.0.0.1:5000";
+                // Get current user and display name
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         document.getElementById('userName').textContent = currentUser.name;
 
@@ -262,7 +275,7 @@
             const token = localStorage.getItem('token');
             
             try {
-                const response = await fetch('http://127.0.0.1:5000/api/transactions', {
+                const response = await fetch('${API_BASE_URL}/api/transactions', {
                     method: 'GET',
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
@@ -323,7 +336,7 @@
             };
 
             try {
-                const response = await fetch('http://127.0.0.1:5000/api/transactions', {
+                const response = await fetch('${API_BASE_URL}/api/transactions', {
                     method: 'POST',
                     headers: { 
                         'Content-Type': 'application/json',
@@ -353,21 +366,44 @@
         function filterTransactionsByTime() {
             const filter = document.getElementById('timeFilter').value;
             const now = new Date();
+            // Today at midnight for clean comparison
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             
             return transactions.filter(t => {
                 const transDate = new Date(t.date);
+                const tDate = new Date(transDate.getFullYear(), transDate.getMonth(), transDate.getDate());
                 
                 switch(filter) {
                     case 'daily':
-                        return transDate.toDateString() === now.toDateString();
+                        return tDate.getTime() === today.getTime();
+
                     case 'weekly':
-                        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-                        return transDate >= weekAgo;
+                        // 1. Find the current Monday
+                        const day = today.getDay(); // 0 is Sun, 1 is Mon...
+                        const diffToMonday = today.getDate() - day + (day === 0 ? -6 : 1);
+                        const monday = new Date(now.getFullYear(), now.getMonth(), diffToMonday);
+                        monday.setHours(0,0,0,0);
+
+                        // 2. Find the current Sunday (Monday + 6 days)
+                        const sunday = new Date(monday);
+                        sunday.setDate(monday.getDate() + 6);
+                        sunday.setHours(23,59,59,999);
+
+                        // Only return if it's BETWEEN this Monday and this Sunday
+                        return tDate >= monday && tDate <= sunday;
+
                     case 'monthly':
                         return transDate.getMonth() === now.getMonth() && 
-                               transDate.getFullYear() === now.getFullYear();
+                            transDate.getFullYear() === now.getFullYear();
+
                     case 'yearly':
                         return transDate.getFullYear() === now.getFullYear();
+
+                    case 'custom':
+                        const selected = document.getElementById('customDatePicker').value;
+                        if (!selected) return true; // Show all if no date picked yet
+                        return transDate.toISOString().split('T')[0] === selected;
+
                     default:
                         return true;
                 }
@@ -437,6 +473,7 @@
 
         function updateCharts(filtered) {
             updateTrendChart(filtered);
+            updateTrendBarChart(filtered);
             updateExpensePieChart(filtered);
             updateIncomeBarChart(filtered);
             updateExpenseBarChart(filtered);
@@ -502,6 +539,58 @@
                                 text: 'Time →'
                             }
                         }
+                    }
+                }
+            });
+        }
+
+        function updateTrendBarChart(filtered) {
+            const data = {};
+            filtered.forEach(t => {
+                if (!data[t.date]) data[t.date] = { income: 0, expense: 0 };
+                if (t.type === 'income') data[t.date].income += t.amount;
+                if (t.type === 'expense') data[t.date].expense += t.amount;
+            });
+
+            // Sort and slice the last 10 dates for readability
+            const chartData = Object.entries(data)
+                .sort((a, b) => new Date(a[0]) - new Date(b[0]))
+                .slice(-10)
+                .map(([date, values]) => ({ 
+                    date: new Date(date).toLocaleDateString(undefined, {month: 'short', day: 'numeric'}), 
+                    ...values 
+                }));
+
+            if (charts.trendBar) charts.trendBar.destroy();
+            
+            const ctx = document.getElementById('trendBarChart');
+            charts.trendBar = new Chart(ctx, {
+                type: 'bar', // Changed to bar
+                data: {
+                    labels: chartData.map(d => d.date),
+                    datasets: [
+                        {
+                            label: 'Income',
+                            data: chartData.map(d => d.income),
+                            backgroundColor: '#10B981', // Green
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Expense',
+                            data: chartData.map(d => d.expense),
+                            backgroundColor: '#EF4444', // Red
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { position: 'top' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
                     }
                 }
             });
@@ -606,7 +695,7 @@
 
             const token = localStorage.getItem('token');
             try {
-                const response = await fetch(`http://127.0.0.1:5000/api/transactions/${id}`, {
+                const response = await fetch(`${API_BASE_URL}/api/transactions/${id}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
