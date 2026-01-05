@@ -153,36 +153,14 @@
             document.getElementById('loginForm').classList.remove('hidden');
         }
 
-        function handleRegister() {
+        async function handleRegister() {
             const name = document.getElementById('registerName').value.trim();
             const email = document.getElementById('registerEmail').value.trim();
             const password = document.getElementById('registerPassword').value;
             const confirmPassword = document.getElementById('registerConfirmPassword').value;
             
             const errorDiv = document.getElementById('registerError');
-            const successDiv = document.getElementById('registerSuccess');
-            
             errorDiv.classList.add('hidden');
-            successDiv.classList.add('hidden');
-
-            if (!name || !email || !password || !confirmPassword) {
-                errorDiv.textContent = 'Please fill in all fields';
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                errorDiv.textContent = 'Please enter a valid email address';
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-
-            if (password.length < 6) {
-                errorDiv.textContent = 'Password must be at least 6 characters';
-                errorDiv.classList.remove('hidden');
-                return;
-            }
 
             if (password !== confirmPassword) {
                 errorDiv.textContent = 'Passwords do not match';
@@ -190,70 +168,57 @@
                 return;
             }
 
-            let users = JSON.parse(localStorage.getItem('users') || '[]');
-            
-            if (users.some(user => user.email === email)) {
-                errorDiv.textContent = 'An account with this email already exists';
-                errorDiv.classList.remove('hidden');
-                return;
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert("Registration successful! Please login.");
+                    toggleForms(); // Switch to login view
+                } else {
+                    errorDiv.textContent = data.error || "Registration failed";
+                    errorDiv.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error("Connection Error:", error);
+                alert("Server error. Make sure your Flask app is running.");
             }
-
-            const newUser = {
-                id: Date.now(),
-                name: name,
-                email: email,
-                password: password,
-                createdAt: new Date().toISOString()
-            };
-
-            users.push(newUser);
-            localStorage.setItem('users', JSON.stringify(users));
-
-            successDiv.textContent = 'Account created successfully! Redirecting to login...';
-            successDiv.classList.remove('hidden');
-
-            document.getElementById('registerName').value = '';
-            document.getElementById('registerEmail').value = '';
-            document.getElementById('registerPassword').value = '';
-            document.getElementById('registerConfirmPassword').value = '';
-
-            setTimeout(() => {
-                showLoginForm();
-                successDiv.classList.add('hidden');
-            }, 2000);
         }
 
-        function handleLogin() {
+        async function handleLogin() {
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
-            
+
             const errorDiv = document.getElementById('loginError');
             errorDiv.classList.add('hidden');
 
-            if (!email || !password) {
-                errorDiv.textContent = 'Please enter email and password';
-                errorDiv.classList.remove('hidden');
-                return;
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Your backend returns 'user' and 'access_token'
+                    localStorage.setItem('currentUser', JSON.stringify(data.user));
+                    localStorage.setItem('token', data.access_token); // Store the JWT
+                    window.location.href = 'dashboard.html';
+                } else {
+                    errorDiv.textContent = data.error || "Invalid credentials";
+                    errorDiv.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error("Connection Error:", error);
+                alert("Could not connect to the server. Is your Flask app running?");
             }
-
-            const users = JSON.parse(localStorage.getItem('users') || '[]');
-            const user = users.find(u => u.email === email && u.password === password);
-
-            if (!user) {
-                errorDiv.textContent = 'Invalid email or password';
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-
-            const currentUser = {
-                id: user.id,
-                name: user.name,
-                email: user.email
-            };
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            
-            console.log('Login successful, redirecting...');
-            window.location.href = 'dashboard.html';
         }
 
         document.addEventListener('keypress', function(e) {
