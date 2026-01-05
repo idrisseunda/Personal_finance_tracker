@@ -41,7 +41,7 @@ class Transaction(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, index=True)
     type = db.Column(db.String(20), nullable=False, index=True)  # income, expense, savings, investment
     category = db.Column(db.String(50), nullable=False, index=True)
-    amount = db.Column(db.Numeric(10, 2), nullable=False)
+    amount = db.Column(db.Numeric(15, 2), nullable=False)
     date = db.Column(db.Date, nullable=False, index=True)
     description = db.Column(db.String(200))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
