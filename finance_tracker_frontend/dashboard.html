@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,7 +37,7 @@
                 <div class="flex items-center gap-4">
                     <img src="AIMS_logo.png" alt="AIMS Logo" class="h-16 w-16 object-contain">
                     <div>
-                        <h1 class="text-4xl font-bold text-gray-800 mb-2">💰FINA-Personal Finance Tracker</h1>
+                        <h1 class="text-4xl font-bold text-blue-600 mb-2">💰FINA-Personal Finance Tracker</h1>
                         <p class="text-gray-600">Track your income, expenses, savings, and investments</p>
                     </div>
                 </div>
@@ -57,20 +58,17 @@
         </header>
 
         <!-- Controls -->
-        <div class="flex gap-4 mb-6 flex-wrap items-center">
+        <div class="flex gap-4 mb-6 flex-wrap items-center justify-between">
             <button onclick="toggleAddForm()" class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-lg flex items-center gap-2 shadow-lg transition-all transform hover:scale-105">
                 <span>➕</span>
                 Add Transaction
             </button>
             
-            <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-lg">
-                <span>🔍</span>
-                <select id="timeFilter" onchange="updateDashboard()" class="border-none bg-transparent focus:outline-none cursor-pointer font-medium text-gray-700">
-                    <option value="daily">Daily</option>
-                    <option value="weekly">Weekly</option>
-                    <option value="monthly" selected>Monthly</option>
-                    <option value="yearly">Yearly</option>
-                </select>
+            <div class="flex gap-2 bg-white px-4 py-2 rounded-lg shadow-lg">
+                <button onclick="setTimeFilter('daily')" id="dailyBtn" class="px-3 py-1 rounded-lg text-sm font-medium transition-all bg-gray-100 text-gray-700 hover:bg-gray-200">Daily</button>
+                <button onclick="setTimeFilter('weekly')" id="weeklyBtn" class="px-3 py-1 rounded-lg text-sm font-medium transition-all bg-gray-100 text-gray-700 hover:bg-gray-200">Weekly</button>
+                <button onclick="setTimeFilter('monthly')" id="monthlyBtn" class="px-3 py-1 rounded-lg text-sm font-medium transition-all bg-blue-600 text-white">Monthly</button>
+                <button onclick="setTimeFilter('yearly')" id="yearlyBtn" class="px-3 py-1 rounded-lg text-sm font-medium transition-all bg-gray-100 text-gray-700 hover:bg-gray-200">Yearly</button>
             </div>
         </div>
 
@@ -124,44 +122,44 @@
 
         <!-- Summary Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-            <div class="bg-gradient-to-br from-green-400 to-green-500 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all">
+            <div class="bg-gradient-to-br from-green-400 to-green-500 rounded-xl shadow-lg p-4 text-white transform hover:scale-105 transition-all">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-sm opacity-90">Total Income</span>
                     <span class="text-2xl">📈</span>
                 </div>
-                <p id="totalIncome" class="text-3xl font-bold">$0.00</p>
+                <p id="totalIncome" class="text-3xl font-bold">0.00</p>
             </div>
 
-            <div class="bg-gradient-to-br from-red-400 to-red-500 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all">
+            <div class="bg-gradient-to-br from-red-400 to-red-500 rounded-xl shadow-lg p-4 text-white transform hover:scale-105 transition-all">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-sm opacity-90">Total Expenses</span>
                     <span class="text-2xl">📉</span>
                 </div>
-                <p id="totalExpense" class="text-3xl font-bold">$0.00</p>
+                <p id="totalExpense" class="text-3xl font-bold">0.00</p>
             </div>
 
-            <div class="bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all">
+            <div class="bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl shadow-lg p-4 text-white transform hover:scale-105 transition-all">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-sm opacity-90">Savings</span>
                     <span class="text-2xl">🐷</span>
                 </div>
-                <p id="totalSavings" class="text-3xl font-bold">$0.00</p>
+                <p id="totalSavings" class="text-3xl font-bold">0.00</p>
             </div>
 
-            <div class="bg-gradient-to-br from-purple-400 to-purple-500 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all">
+            <div class="bg-gradient-to-br from-purple-400 to-purple-500 rounded-xl shadow-lg p-4 text-white transform hover:scale-105 transition-all">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-sm opacity-90">Investments</span>
                     <span class="text-2xl">💰</span>
                 </div>
-                <p id="totalInvestment" class="text-3xl font-bold">$0.00</p>
+                <p id="totalInvestment" class="text-3xl font-bold">0.00</p>
             </div>
 
-            <div id="balanceCard" class="bg-gradient-to-br from-teal-400 to-teal-500 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all">
+            <div id="balanceCard" class="bg-gradient-to-br from-teal-400 to-teal-500 rounded-xl shadow-lg p-4 text-white transform hover:scale-105 transition-all">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-sm opacity-90">Balance</span>
                     <span class="text-2xl">📅</span>
                 </div>
-                <p id="balance" class="text-3xl font-bold">$0.00</p>
+                <p id="balance" class="text-3xl font-bold">0.00</p>
             </div>
         </div>
 
@@ -314,6 +312,23 @@
             });
         }
 
+        // Time filter button function
+        function setTimeFilter(filter) {
+            document.getElementById('timeFilter').value = filter;
+            updateDashboard();
+            
+            // Update button styles
+            const buttons = ['dailyBtn', 'weeklyBtn', 'monthlyBtn', 'yearlyBtn'];
+            buttons.forEach(btnId => {
+                const btn = document.getElementById(btnId);
+                if (btnId === filter + 'Btn') {
+                    btn.className = 'px-3 py-1 rounded-lg text-sm font-medium transition-all bg-blue-600 text-white';
+                } else {
+                    btn.className = 'px-3 py-1 rounded-lg text-sm font-medium transition-all bg-gray-100 text-gray-700 hover:bg-gray-200';
+                }
+            });
+        }
+
         // 1. UPDATE the function header to include 'async'
         async function addTransaction() {
             const token = localStorage.getItem('token');
@@ -418,9 +433,9 @@
             
             const balanceCard = document.getElementById('balanceCard');
             if (balance >= 0) {
-                balanceCard.className = 'bg-gradient-to-br from-teal-400 to-teal-500 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all';
+                balanceCard.className = 'bg-gradient-to-br from-teal-400 to-teal-500 rounded-xl shadow-lg p-4 text-white transform hover:scale-105 transition-all';
             } else {
-                balanceCard.className = 'bg-gradient-to-br from-orange-400 to-orange-500 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all';
+                balanceCard.className = 'bg-gradient-to-br from-orange-400 to-orange-500 rounded-xl shadow-lg p-4 text-white transform hover:scale-105 transition-all';
             }
 
             updateTransactionTable(filtered);
