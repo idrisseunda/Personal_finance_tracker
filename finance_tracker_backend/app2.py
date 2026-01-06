@@ -1,3 +1,4 @@
+#This file is not a part of the project is was just a test during the traning
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
