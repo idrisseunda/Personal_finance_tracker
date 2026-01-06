@@ -35,7 +35,7 @@ FINA is a professional-grade, full-stack personal finance management application
 *   `index.html`: The primary entry point for users. It contains both the Login and Registration forms and the core JavaScript logic.
 *   `dashboard.html`: The main workspace where users add transactions and view their total balance.
 *   `top-view-desk-with-financial-instruments.jpg`: The high-resolution background image used for the login screen.
-*   `AIMS_logo.png` / `AIMS_logo.ico`: Branding assets for the application logo and browser tab icon.
+*   `tracklogo.png` : Branding assets for the application logo and browser tab icon.
 
 ## 4. Environment Variables (.env)
 
@@ -108,7 +108,7 @@ When a user adds an expense:
 
 ## 8. Deployment Summary
 
-*   **Frontend Hosting**: Netlify (for fast delivery of HTML and images).
+*   **Frontend Hosting**: Render(for fast delivery of HTML and images).
 *   **Backend Hosting**: Render (running the Python/Flask environment).
 *   **Database**: Render PostgreSQL (storing user and transaction data permanently).
 
