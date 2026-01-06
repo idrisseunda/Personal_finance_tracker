@@ -112,4 +112,5 @@ When a user adds an expense:
 *   **Backend Hosting**: Render (running the Python/Flask environment).
 *   **Database**: Render PostgreSQL (storing user and transaction data permanently).
 
-Created for FINA Personal Finance Project
+Created by Felicite, Idris, Ngozi and Adam
+
