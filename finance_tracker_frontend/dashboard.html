@@ -124,7 +124,7 @@
 
         <!-- Summary Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-            <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-2xl p-6 text-white transform hover:scale-105 transition-all">
+            <div class="bg-gradient-to-br from-green-400 to-green-500 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-sm opacity-90">Total Income</span>
                     <span class="text-2xl">📈</span>
@@ -132,7 +132,7 @@
                 <p id="totalIncome" class="text-3xl font-bold">$0.00</p>
             </div>
 
-            <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl shadow-2xl p-6 text-white transform hover:scale-105 transition-all">
+            <div class="bg-gradient-to-br from-red-400 to-red-500 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-sm opacity-90">Total Expenses</span>
                     <span class="text-2xl">📉</span>
@@ -140,7 +140,7 @@
                 <p id="totalExpense" class="text-3xl font-bold">$0.00</p>
             </div>
 
-            <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-2xl p-6 text-white transform hover:scale-105 transition-all">
+            <div class="bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-sm opacity-90">Savings</span>
                     <span class="text-2xl">🐷</span>
@@ -148,7 +148,7 @@
                 <p id="totalSavings" class="text-3xl font-bold">$0.00</p>
             </div>
 
-            <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-2xl p-6 text-white transform hover:scale-105 transition-all">
+            <div class="bg-gradient-to-br from-purple-400 to-purple-500 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-sm opacity-90">Investments</span>
                     <span class="text-2xl">💰</span>
@@ -156,7 +156,7 @@
                 <p id="totalInvestment" class="text-3xl font-bold">$0.00</p>
             </div>
 
-            <div id="balanceCard" class="bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl shadow-2xl p-6 text-white transform hover:scale-105 transition-all">
+            <div id="balanceCard" class="bg-gradient-to-br from-teal-400 to-teal-500 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-sm opacity-90">Balance</span>
                     <span class="text-2xl">📅</span>
@@ -410,17 +410,17 @@
             const totalInvestment = filtered.filter(t => t.type === 'investment').reduce((sum, t) => sum + t.amount, 0);
             const balance = totalIncome - totalExpense - totalSavings - totalInvestment;
 
-            document.getElementById('totalIncome').textContent = 'F' + totalIncome.toFixed(2);
-            document.getElementById('totalExpense').textContent = 'F' + totalExpense.toFixed(2);
-            document.getElementById('totalSavings').textContent = 'F' + totalSavings.toFixed(2);
-            document.getElementById('totalInvestment').textContent = 'F' + totalInvestment.toFixed(2);
-            document.getElementById('balance').textContent = 'F' + balance.toFixed(2);
+            document.getElementById('totalIncome').textContent = 'CFA ' + totalIncome.toFixed(2);
+            document.getElementById('totalExpense').textContent = 'CFA ' + totalExpense.toFixed(2);
+            document.getElementById('totalSavings').textContent = 'CFA ' + totalSavings.toFixed(2);
+            document.getElementById('totalInvestment').textContent = 'CFA ' + totalInvestment.toFixed(2);
+            document.getElementById('balance').textContent = 'CFA ' + balance.toFixed(2);
             
             const balanceCard = document.getElementById('balanceCard');
             if (balance >= 0) {
-                balanceCard.className = 'bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl shadow-2xl p-6 text-white transform hover:scale-105 transition-all';
+                balanceCard.className = 'bg-gradient-to-br from-teal-400 to-teal-500 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all';
             } else {
-                balanceCard.className = 'bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-2xl p-6 text-white transform hover:scale-105 transition-all';
+                balanceCard.className = 'bg-gradient-to-br from-orange-400 to-orange-500 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all';
             }
 
             updateTransactionTable(filtered);
@@ -451,7 +451,7 @@
                         </td>
                         <td class="py-3 px-4">${t.category}</td>
                         <td class="py-3 px-4 text-gray-600">${t.description || '-'}</td>
-                        <td class="py-3 px-4 text-right font-semibold">F${t.amount.toFixed(2)}</td>
+                        <td class="py-3 px-4 text-right font-semibold">CFA ${t.amount.toFixed(2)}</td>
                         <td class="py-3 px-4 text-center">
                             <button onclick="deleteTransaction(${t.id})" class="text-red-600 hover:text-red-800 font-medium">
                                 Delete
