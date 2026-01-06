@@ -67,8 +67,7 @@ Personal_finance_tracker/
 ├── frontend/                       # Static Frontend (Deployed on Netlify)
 │   ├── index.html                  # Landing page: Login & Registration (with Tailwind)
 │   ├── dashboard.html              # User Dashboard: Transaction history & Balance tracking
-│   ├── AIMS_logo.png               # Brand Asset: Navbar and Form logo
-│   ├── AIMS_logo.ico               # Brand Asset: Browser tab icon
+│   ├── tracklogo.png               # Brand Asset: Navbar and Form logo
 │   ├── background.jpg              # UI Asset: General application background
 │   └── top-view-desk-with-financial-instruments.jpg # UI Asset: Immersive Login background
 └── README.md                       # Comprehensive Project Documentation (3+ pages)
