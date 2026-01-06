@@ -60,8 +60,25 @@ JWT_SECRET_KEY=your_super_secret_random_key_here
 # Flask Configuration
 FLASK_APP=app.py
 FLASK_ENV=production
+5. Detailed Project Structure
 
-5. Key Functions & Modules Deep-Dive
+Personal_finance_tracker/
+Personal_finance_tracker/
+├── finance_tracker_backend/        # Python Flask Backend (Deployed on Render)
+│   ├── app.py                      # Core API: Routes, JWT setup, and Flask initialization
+│   ├── models.py                   # Database Models: Defines User and Transaction tables
+│   ├── requirements.txt            # Python dependencies (Flask, SQLAlchemy, etc.)
+│   └── .env                        # Private environment variables (DATABASE_URL, SECRET_KEY)
+├── frontend/                       # Static Frontend (Deployed on Netlify)
+│   ├── index.html                  # Landing page: Login & Registration (with Tailwind)
+│   ├── dashboard.html              # User Dashboard: Transaction history & Balance tracking
+│   ├── AIMS_logo.png               # Brand Asset: Navbar and Form logo
+│   ├── AIMS_logo.ico               # Brand Asset: Browser tab icon
+│   ├── background.jpg              # UI Asset: General application background
+│   └── top-view-desk-with-financial-instruments.jpg # UI Asset: Immersive Login background
+└── README.md                       # Comprehensive Project Documentation (3+ pages)
+Backend Structure (/finance_tracker_backend)
+6. Key Functions & Modules Deep-Dive
 Frontend JavaScript Functions
 
     handleLogin(): Captures user credentials, sends them to the backend, and stores the returned JWT token in localStorage for session persistence.
@@ -76,7 +93,7 @@ Backend Modules
 
     gunicorn: The production-grade server that hosts your Python code on Render.
 
-6. Step-by-Step App Working Process
+7. Step-by-Step App Working Process
 1. The Authentication Phase
 
 The user enters their details on the frontend. The JavaScript fetch() function sends a POST request to the backend. The backend hashes the password (for security) and checks it against the database. If correct, it returns a JWT token.
@@ -94,7 +111,7 @@ When a user adds an expense:
     The frontend then recalculates the balance using the formula:
     Balance=∑Income−∑Expenses
 
-7. Deployment Summary
+8. Deployment Summary
 
     Frontend Hosting: Netlify (for fast delivery of HTML and images).
 
